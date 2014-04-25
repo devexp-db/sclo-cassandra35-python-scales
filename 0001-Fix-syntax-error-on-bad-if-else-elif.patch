@@ -1,0 +1,31 @@
+From d774e17988c6db43f9e1a49aebfaabb152d97820 Mon Sep 17 00:00:00 2001
+From: Tyler Hobbs <tyler@datastax.com>
+Date: Thu, 3 Apr 2014 17:42:52 -0500
+Subject: [PATCH] Fix syntax error on bad if/else/elif
+
+---
+ src/greplin/scales/graphite.py | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/src/greplin/scales/graphite.py b/src/greplin/scales/graphite.py
+index 13133e6..06396f9 100644
+--- a/src/greplin/scales/graphite.py
++++ b/src/greplin/scales/graphite.py
+@@ -105,11 +105,13 @@ class GraphitePusher(object):
+         self.push(value, '%s%s.' % (prefix, self._sanitize(name)), subpath)
+       elif self._forbidden(subpath, value):
+         continue
++
+       if six.PY3:
+         type_values = (int, float)
+       else:
+         type_values = (int, long, float)
+-      elif type(value) in type_values and len(name) < 500:
++
++      if type(value) in type_values and len(name) < 500:
+         self.graphite.log(prefix + self._sanitize(name), value)
+ 
+ 
+-- 
+1.8.3.1
+
