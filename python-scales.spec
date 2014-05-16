@@ -8,7 +8,7 @@
 
 Name:           python-scales
 Version:        1.0.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Stats for Python processes
 
 Group:          Development/Libraries
@@ -117,6 +117,9 @@ cd %{py3dir}
 
 
 %changelog
+* Wed May 14 2014 Bohuslav Kabrda <bkabrda@redhat.com> - 1.0.5-2
+- Rebuilt for https://fedoraproject.org/wiki/Changes/Python_3.4
+
 * Wed Apr 23 2014 Lubomir Rintel (GoodData) <lubo.rintel@gooddata.com> - 1.0.5-1
 - Update to 1.0.5
 - Add Python 3 support
