@@ -8,7 +8,7 @@
 
 Name:           python-scales
 Version:        1.0.5
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Stats for Python processes
 
 Group:          Development/Libraries
@@ -117,6 +117,9 @@ cd %{py3dir}
 
 
 %changelog
+* Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.5-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
+
 * Tue Nov 10 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.0.5-5
 - Rebuilt for https://fedoraproject.org/wiki/Changes/python3.5
 
