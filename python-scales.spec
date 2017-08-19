@@ -8,7 +8,7 @@
 
 Name:           python-scales
 Version:        1.0.5
-Release:        10%{?dist}
+Release:        11%{?dist}
 Summary:        Stats for Python processes
 
 Group:          Development/Libraries
@@ -37,14 +37,21 @@ BuildRequires:  python3-nose
 %endif
 BuildRequires:  python-setuptools
 
+%global _description\
+Tracks server state and statistics, allowing you to see what your server is\
+doing. It can also send metrics to Graphite for graphing or to a file for crash\
+forensics.\
+
+
+%description %_description
+
+%package -n python2-scales
+Summary: %summary
 Requires:       python-six
 Requires:       python-simplejson
+%{?python_provide:%python_provide python2-scales}
 
-%description
-Tracks server state and statistics, allowing you to see what your server is
-doing. It can also send metrics to Graphite for graphing or to a file for crash
-forensics.
-
+%description -n python2-scales %_description
 
 %if %with python3
 %package -n python3-scales
@@ -100,7 +107,7 @@ cd %{py3dir}
 %endif
 
 
-%files
+%files -n python2-scales
 %{python2_sitelib}/greplin/
 %{python2_sitelib}/scales*.egg-info/
 %{python2_sitelib}/scales*.pth
@@ -117,6 +124,10 @@ cd %{py3dir}
 
 
 %changelog
+* Sat Aug 19 2017 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 1.0.5-11
+- Python 2 binary package renamed to python2-scales
+  See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3
+
 * Thu Jul 27 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.5-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
 
