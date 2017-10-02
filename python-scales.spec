@@ -1,3 +1,6 @@
+%{?scl:%scl_package python-scales}
+%{!?scl:%global pkg_name %{name}}
+
 %if 0%{?rhel}
 %bcond_with python3
 %else
@@ -6,9 +9,9 @@
 
 %global commit c0602416b6f8c688409f811c51a2962b75e78935
 
-Name:           python-scales
+Name:           %{?scl_prefix}python-scales
 Version:        1.0.5
-Release:        11%{?dist}
+Release:        12%{?dist}
 Summary:        Stats for Python processes
 
 Group:          Development/Libraries
@@ -27,15 +30,17 @@ BuildArch:      noarch
 
 BuildRequires:  python2-devel
 BuildRequires:  python-six
-BuildRequires:  python-simplejson
+BuildRequires:  %{?scl_prefix}python2-simplejson
 BuildRequires:  python-nose
 %if %with python3
 BuildRequires:  python3-devel
 BuildRequires:  python3-six
-BuildRequires:  python3-simplejson
+BuildRequires:  %{?scl_prefix}python3-simplejson
 BuildRequires:  python3-nose
 %endif
 BuildRequires:  python-setuptools
+%{?scl:Requires: %scl_runtime}
+%{?scl:BuildRequires: %scl-scldevel}
 
 %global _description\
 Tracks server state and statistics, allowing you to see what your server is\
@@ -45,22 +50,22 @@ forensics.\
 
 %description %_description
 
-%package -n python2-scales
+%package -n %{?scl_prefix}python2-scales
 Summary: %summary
 Requires:       python-six
-Requires:       python-simplejson
-%{?python_provide:%python_provide python2-scales}
+Requires:       %{?scl_prefix}python2-simplejson
+%{!?scl:%{?python_provide:%python_provide python2-scales}}
 
-%description -n python2-scales %_description
+%description -n %{?scl_prefix}python2-scales %_description
 
 %if %with python3
-%package -n python3-scales
+%package -n %{?scl_prefix}python3-scales
 Summary:        Stats for Python 3 processes
 Group:          Development/Libraries
 Requires:       python3-six
-Requires:       python3-simplejson
+Requires:       %{?scl_prefix}python3-simplejson
 
-%description -n python3-scales
+%description -n %{?scl_prefix}python3-scales
 Tracks server state and statistics, allowing you to see what your server is
 doing. It can also send metrics to Graphite for graphing or to a file for crash
 forensics.
@@ -80,34 +85,40 @@ cp -a . %{py3dir}
 
 
 %build
+%{?scl:scl enable %{scl} - << "EOF"}
 %{__python2} setup.py build
 
 %if %with python3
 cd %{py3dir}
 %{__python3} setup.py build
 %endif
+%{?scl:EOF}
 
 
 
 %install
-%{__python2} setup.py install --skip-build --root %{buildroot}
+%{?scl:scl enable %{scl} - << "EOF"}
+%{__python2} setup.py install --skip-build --root %{buildroot} --prefix %{?_prefix}
 
 %if %with python3
 cd %{py3dir}
-%{__python3} setup.py install --skip-build --root %{buildroot}
+%{__python3} setup.py install --skip-build --root %{buildroot} --prefix %{?_prefix}
 %endif
+%{?scl:EOF}
 
 
 %check
+%{?scl:scl enable %{scl} - << "EOF"}
 %{__python2} setup.py test
 
 %if %with python3
 cd %{py3dir}
 %{__python3} setup.py test
 %endif
+%{?scl:EOF}
 
 
-%files -n python2-scales
+%files -n %{?scl_prefix}python2-scales
 %{python2_sitelib}/greplin/
 %{python2_sitelib}/scales*.egg-info/
 %{python2_sitelib}/scales*.pth
@@ -115,7 +126,7 @@ cd %{py3dir}
 
 
 %if %with python3
-%files -n python3-scales
+%files -n %{?scl_prefix}python3-scales
 %{python3_sitelib}/greplin/
 %{python3_sitelib}/scales*.egg-info
 %{python3_sitelib}/scales*.pth
@@ -124,6 +135,9 @@ cd %{py3dir}
 
 
 %changelog
+* Mon Oct 02 2017 Augusto Mecking Caringi <acaringi@redhat.com> - 1.0.5-12
+- scl conversion
+
 * Sat Aug 19 2017 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 1.0.5-11
 - Python 2 binary package renamed to python2-scales
   See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3
